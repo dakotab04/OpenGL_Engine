@@ -2,9 +2,10 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+// Adjust the viewport when the window is resized
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    glViewport(0, 0, width, height); // Adjust the viewport when the window is resized
+    glViewport(0, 0, width, height);
 }
 
 // If user presses escape, close window
@@ -41,24 +42,26 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // For Mac compatibility
 #endif
 
-    // Create window before loading GLAD and making context current
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    // Create window before loading GLAD
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL Rendering Engine", NULL, NULL);
     if (window == NULL)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
+        std::cout << "Failed to create GLFW window" << '\n';
         glfwTerminate();
         return -1;
     }
+
     glfwMakeContextCurrent(window);
 
     // Initialize GLAD after context creation
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::cout << "Failed to initialize GLAD" << '\n';
         return -1;
     }
 
@@ -73,10 +76,11 @@ int main()
     int success;
     char infoLog[512];
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
+
+    if (!success) // If vertex shader compilation fails
     {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << '\n';
     }
 
     // Create fragment shader
@@ -84,21 +88,24 @@ int main()
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
+
+    if (!success) // If fragment shader compilation fails
     {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << '\n';
     }
 
-    // Link shaders into a shader program
+    // Link vertex + fragment shaders into a shader program
     unsigned int shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
+
+    if (!success) // If linking fails
+    {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << '\n';
     }
 
     // Clean up shader objects after linking
@@ -111,7 +118,7 @@ int main()
         -0.5f, -0.5f, 0.0f,  // bottom left
         -0.5f,  0.5f, 0.0f   // top left 
     };
-    unsigned int indices[] = { // note that we start from 0!
+    unsigned int indices[] = {
         0, 1, 3, // first triangle
         1, 2, 3 // second triangle
     };
@@ -121,6 +128,7 @@ int main()
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
+
     // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
     glBindVertexArray(VAO);
 
@@ -141,7 +149,7 @@ int main()
     // Uncomment to draw in wireframe mode
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    // Main loop
+    // Main loop: while the window is open
     while (!glfwWindowShouldClose(window))
     {
         processInput(window); // If user presses ESC, close window
