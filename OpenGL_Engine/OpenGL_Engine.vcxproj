@@ -143,7 +143,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\awesome_face.png" />
-    <Image Include="resources\textures\japanese_stone_wall.jpg" />
     <Image Include="resources\textures\tony.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

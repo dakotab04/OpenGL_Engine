@@ -41,9 +41,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\textures\japanese_stone_wall.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="resources\textures\tony.jpg">
       <Filter>Resource Files</Filter>
     </Image>
