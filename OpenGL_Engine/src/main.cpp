@@ -130,6 +130,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // bind Texture
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         // render container
