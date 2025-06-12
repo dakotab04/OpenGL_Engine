@@ -26,8 +26,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\4.1.texture.fs" />
-    <None Include="src\shaders\4.1.texture.vs" />
+    <None Include="src\shaders\6.1.coordinate_system.fs" />
+    <None Include="src\shaders\6.1.coordinate_system.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
@@ -44,7 +44,7 @@
     <Image Include="resources\textures\tony.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="resources\textures\awesome_face.png">
+    <Image Include="resources\textures\paulie.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
