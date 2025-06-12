@@ -48,6 +48,8 @@ int main()
         return -1;
     }
 
+    glEnable(GL_DEPTH_TEST);
+
     // build and compile our shader source code
     Shader ourShader("src/shaders/6.1.coordinate_system.vs", "src/shaders/6.1.coordinate_system.fs");
 
@@ -142,7 +144,7 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // load image, create texture and generate mipmaps
+    // load image 1, create texture and generate mipmaps
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
     unsigned char* data = stbi_load(FileSystem::getPath("resources/textures/tony.jpg").c_str(), &width, &height, &nrChannels, 0);
@@ -155,7 +157,6 @@ int main()
     {
         std::cout << "Failed to load texture" << std::endl;
     }
-
     stbi_image_free(data);
 
     // texture 2
@@ -170,7 +171,7 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    // load image, create texture and generate mipmaps
+    // load image 2, create texture and generate mipmaps
     data = stbi_load(FileSystem::getPath("resources/textures/paulie.png").c_str(), &width, &height, &nrChannels, 0);
     if (data)
     {
@@ -188,7 +189,9 @@ int main()
     ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);
 
-    glEnable(GL_DEPTH_TEST);
+    // pass projection matrix to shader (as projection matrix rarely changes there's no need to do this per frame)
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    ourShader.setMat4("projection", projection);
 
     // render loop
     while (!glfwWindowShouldClose(window))
@@ -207,14 +210,13 @@ int main()
         glBindTexture(GL_TEXTURE_2D, texture2);
 
         ourShader.use();
-
-        // create transformations
+        
+        // camera/view transformation
         glm::mat4 view = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-        glm::mat4 projection = glm::mat4(1.0f);
-        projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-        // pass transformation matrices to the shader
-        ourShader.setMat4("projection", projection); // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
+        float radius = 10.0f;
+        float camX = static_cast<float>(sin(glfwGetTime()) * radius);
+        float camZ = static_cast<float>(cos(glfwGetTime()) * radius);
+        view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         ourShader.setMat4("view", view);
 
         // render boxes
@@ -236,13 +238,13 @@ int main()
         glfwPollEvents();
     }
 
-    // optional: de-allocate all resources once they've outlived their purpose:
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+        // optional: de-allocate all resources once they've outlived their purpose:
+        glDeleteVertexArrays(1, &VAO);
+        glDeleteBuffers(1, &VBO);
 
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    glfwTerminate();
-    return 0;
+        // glfw: terminate, clearing all previously allocated GLFW resources.
+        glfwTerminate();
+        return 0;
 }
 
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
