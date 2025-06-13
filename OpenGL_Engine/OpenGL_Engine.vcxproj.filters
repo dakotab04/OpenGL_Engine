@@ -26,8 +26,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\7.4.camera_system.fs" />
-    <None Include="src\shaders\7.4.camera_system.vs" />
+    <None Include="src\shaders\1.colors.fs" />
+    <None Include="src\shaders\1.colors.vs" />
+    <None Include="src\shaders\1.light_cube.fs" />
+    <None Include="src\shaders\1.light_cube.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Shader.h">
