@@ -1,5 +1,5 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <glad/glad.h> // For cross-platform access to OpenGL functions 
+#include <GLFW/glfw3.h> // For creating windows, handling user input, and manage OpenGL context
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -18,30 +18,31 @@ void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-// settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+// window dimensions
+const unsigned int SCR_WIDTH = 800; // window width
+const unsigned int SCR_HEIGHT = 600; // window height
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-float lastX = SCR_WIDTH / 2.0f;
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f)); // creates 3d vector representing camera pos
+float lastX = SCR_WIDTH / 2.0f; // store last known mouse position (x, y)
 float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true;
+bool firstMouse = true; // ignore first mouse input -> avoid jumpy camera actions
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
 // lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f); // create 3d vector representing light position
 
 int main()
 {
     // glfw: initialize and configure
+    // create openGL context version 3.3
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // use core profile
 
     // For apple compatibility
 #ifdef __APPLE__
@@ -50,7 +51,7 @@ int main()
 
     // glfw window creation
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL Rendering Engine", NULL, NULL);
-    if (window == NULL)
+    if (window == NULL) // if window creation doesn't work
     {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -75,10 +76,10 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // build and compile our shader source code
-    Shader lightingShader("src/shaders/2.2.basic_lighting.vs", "src/shaders/2.2.basic_lighting.fs");
-    Shader lightCubeShader("src/shaders/2.2.light_cube.vs", "src/shaders/2.2.light_cube.fs");
+    Shader lightingShader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/3.1.materials.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/3.1.materials.fs");
+    Shader lightCubeShader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/3.1.light_cube.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/3.1.light_cube.fs");
 
-    // set up vertex data (and buffer(s)) and configure vertex attributes
+    // set up vertex data, buffers, and configure vertex attributes
     float vertices[] = {
            -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
             0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -123,7 +124,7 @@ int main()
            -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
 
-    // Initialize vertex buffer obj / cube vertex array obj
+    // Initialize vertex buffer obj & cube vertex array obj
     unsigned int VBO, cubeVAO;
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &VBO);
@@ -145,7 +146,8 @@ int main()
     glGenVertexArrays(1, &lightCubeVAO);
     glBindVertexArray(lightCubeVAO);
 
-    // we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
+    // we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains 
+    // all we need (it's already bound, but we do it again for educational purposes)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     // note that we update the lamp's position attribute's stride to reflect the updated buffer data
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
@@ -167,10 +169,25 @@ int main()
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
-        lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        lightingShader.setVec3("lightPos", lightPos);
+        lightingShader.setVec3("light.position", lightPos);
         lightingShader.setVec3("viewPos", camera.Position);
+
+        // light properties
+        glm::vec3 lightColor;
+        lightColor.x = sin(glfwGetTime() * 2.0f);
+        lightColor.y = sin(glfwGetTime() * 0.7f);
+        lightColor.z = sin(glfwGetTime() * 1.3f);
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+        lightingShader.setVec3("light.ambient", ambientColor);
+        lightingShader.setVec3("light.diffuse", diffuseColor);
+        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+
+        // matertial properties
+        lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
+        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+        lightingShader.setFloat("material.shininess", 32.0f);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -186,7 +203,6 @@ int main()
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
-
         // also draw the lamp object
         lightCubeShader.use();
         lightCubeShader.setMat4("projection", projection);
@@ -198,7 +214,6 @@ int main()
 
         glBindVertexArray(lightCubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(window);
