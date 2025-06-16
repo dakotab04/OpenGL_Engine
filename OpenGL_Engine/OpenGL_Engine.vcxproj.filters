@@ -46,13 +46,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\textures\tony.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="resources\textures\paulie.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="resources\textures\diamond.png">
+    <Image Include="resources\textures\container2.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
