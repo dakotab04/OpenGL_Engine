@@ -20,8 +20,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 unsigned int loadTexture(const char* path);
 
 // window dimensions
-const unsigned int SCR_WIDTH = 800; // window width
-const unsigned int SCR_HEIGHT = 600; // window height
+const unsigned int SCR_WIDTH = 1920; // window width
+const unsigned int SCR_HEIGHT = 1080; // window height
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f)); // creates 3d vector representing camera pos
