@@ -133,10 +133,10 @@
     <ClCompile Include="src\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\3.1.materials.fs" />
-    <None Include="src\shaders\3.1.materials.vs" />
-    <None Include="src\shaders\3.1.light_cube.fs" />
-    <None Include="src\shaders\3.1.light_cube.vs" />
+    <None Include="src\shaders\5.1.light_casters.fs" />
+    <None Include="src\shaders\5.1.light_casters.vs" />
+    <None Include="src\shaders\5.1.light_cube.fs" />
+    <None Include="src\shaders\5.1.light_cube.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\filesystem.h" />
