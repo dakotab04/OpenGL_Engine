@@ -20,8 +20,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 unsigned int loadTexture(const char* path);
 
 // window dimensions
-const unsigned int SCR_WIDTH = 1280; // window width
-const unsigned int SCR_HEIGHT = 720; // window height
+const unsigned int SCR_WIDTH = 1920; // window width
+const unsigned int SCR_HEIGHT = 1080; // window height
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f)); // creates 3d vector representing camera pos
@@ -195,7 +195,9 @@ int main()
 
         // be sure to activate shader when setting uniforms/drawing objects
         lightingShader.use();
-        lightingShader.setVec3("light.position", -0.2f, -1.0f, -0.3f);
+        lightingShader.setVec3("light.position", camera.Position);
+        lightingShader.setVec3("light.direction", camera.Front);
+        lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
         lightingShader.setVec3("viewPos", camera.Position);
 
         // light properties
@@ -241,18 +243,18 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        // draw the lamp object
-        lightCubeShader.use();
+        // no need  to draw the lamp object
+      /*lightCubeShader.use();
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        lightCubeShader.setMat4("model", model);
+        lightCubeShader.setMat4("model", model);*/
 
         // render the lightCube
-        glBindVertexArray(lightCubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        //glBindVertexArray(lightCubeVAO);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         glfwSwapBuffers(window);
