@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/assimp-master/build/cmake_install.cmake",
+		"C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/assimp-master/build/contrib/zlib/cmake_install.cmake",
+		"C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/assimp-master/build/code/cmake_install.cmake",
+		"C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/assimp-master/build/test/cmake_install.cmake",
+		"C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/assimp-master/build/test/headercheck/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
