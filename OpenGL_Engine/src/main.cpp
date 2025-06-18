@@ -9,7 +9,7 @@
 #include "includes/filesystem.h"
 #include "includes/Shader.h"
 #include "includes/Camera.h"
-#include "includes/Model.h"
+#include "includes/Model.h" // for importing models
 
 #include <iostream>
 
