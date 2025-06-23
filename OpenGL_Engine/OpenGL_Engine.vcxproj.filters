@@ -26,8 +26,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\model_loading.fs" />
-    <None Include="src\shaders\model_loading.vs" />
+    <None Include="src\shaders\depth_testing.fs" />
+    <None Include="src\shaders\depth_testing.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\Shader.h">
@@ -54,6 +54,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\textures\container2_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\cube.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\floor.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

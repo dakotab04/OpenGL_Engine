@@ -134,8 +134,8 @@
     <ClCompile Include="src\includes\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\model_loading.fs" />
-    <None Include="src\shaders\model_loading.vs" />
+    <None Include="src\shaders\depth_testing.fs" />
+    <None Include="src\shaders\depth_testing.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\filesystem.h" />
@@ -148,6 +148,8 @@
   <ItemGroup>
     <Image Include="resources\textures\container2.png" />
     <Image Include="resources\textures\container2_specular.png" />
+    <Image Include="resources\textures\cube.jpg" />
+    <Image Include="resources\textures\floor.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
