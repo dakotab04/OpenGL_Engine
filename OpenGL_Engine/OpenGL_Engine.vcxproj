@@ -134,8 +134,8 @@
     <ClCompile Include="src\includes\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\blending_discard.fs" />
-    <None Include="src\shaders\blending_discard.vs" />
+    <None Include="src\shaders\blending.fs" />
+    <None Include="src\shaders\blending.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\filesystem.h" />
@@ -151,6 +151,7 @@
     <Image Include="resources\textures\cube.jpg" />
     <Image Include="resources\textures\floor.jpg" />
     <Image Include="resources\textures\grass.png" />
+    <Image Include="resources\textures\window.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -26,8 +26,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\blending_discard.fs" />
-    <None Include="src\shaders\blending_discard.vs" />
+    <None Include="src\shaders\blending.fs" />
+    <None Include="src\shaders\blending.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\Shader.h">
@@ -63,6 +63,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\textures\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\window.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
