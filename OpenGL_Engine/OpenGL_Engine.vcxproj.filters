@@ -26,9 +26,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\stencil_testing.fs" />
-    <None Include="src\shaders\stencil_testing.vs" />
-    <None Include="src\shaders\stencil_single_color.fs" />
+    <None Include="src\shaders\blending_discard.fs" />
+    <None Include="src\shaders\blending_discard.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\Shader.h">
@@ -61,6 +60,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\textures\floor.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\grass.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
