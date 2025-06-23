@@ -26,8 +26,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\depth_testing.fs" />
-    <None Include="src\shaders\depth_testing.vs" />
+    <None Include="src\shaders\stencil_testing.fs" />
+    <None Include="src\shaders\stencil_testing.vs" />
+    <None Include="src\shaders\stencil_single_color.fs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\Shader.h">

@@ -134,8 +134,9 @@
     <ClCompile Include="src\includes\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\depth_testing.fs" />
-    <None Include="src\shaders\depth_testing.vs" />
+    <None Include="src\shaders\stencil_single_color.fs" />
+    <None Include="src\shaders\stencil_testing.fs" />
+    <None Include="src\shaders\stencil_testing.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\filesystem.h" />
