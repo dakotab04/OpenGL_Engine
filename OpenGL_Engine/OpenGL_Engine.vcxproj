@@ -134,8 +134,10 @@
     <ClCompile Include="src\includes\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\blending.fs" />
-    <None Include="src\shaders\blending.vs" />
+    <None Include="src\shaders\framebuffers.fs" />
+    <None Include="src\shaders\framebuffers.vs" />
+    <None Include="src\shaders\framebuffers_screen.fs" />
+    <None Include="src\shaders\framebuffers_screen.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\filesystem.h" />
@@ -148,8 +150,9 @@
   <ItemGroup>
     <Image Include="resources\textures\container2.png" />
     <Image Include="resources\textures\container2_specular.png" />
-    <Image Include="resources\textures\cube.jpg" />
+    <Image Include="resources\textures\cube.png" />
     <Image Include="resources\textures\floor.jpg" />
+    <Image Include="resources\textures\floor.png" />
     <Image Include="resources\textures\grass.png" />
     <Image Include="resources\textures\window.png" />
   </ItemGroup>

@@ -26,8 +26,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\blending.fs" />
-    <None Include="src\shaders\blending.vs" />
+    <None Include="src\shaders\framebuffers.fs" />
+    <None Include="src\shaders\framebuffers.vs" />
+    <None Include="src\shaders\framebuffers_screen.fs" />
+    <None Include="src\shaders\framebuffers_screen.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\Shader.h">
@@ -56,9 +58,6 @@
     <Image Include="resources\textures\container2_specular.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="resources\textures\cube.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="resources\textures\floor.jpg">
       <Filter>Resource Files</Filter>
     </Image>
@@ -66,6 +65,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="resources\textures\window.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\cube.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\floor.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
