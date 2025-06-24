@@ -22,8 +22,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 unsigned int loadTexture(const char *path);
 
 // change to native resolution here:
-const unsigned int SCR_WIDTH = 800; // window width
-const unsigned int SCR_HEIGHT = 600; // window height
+const unsigned int SCR_WIDTH = 1920; // window width
+const unsigned int SCR_HEIGHT = 1080; // window height
 
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f)); // creates 3d vector representing camera pos
@@ -130,13 +130,13 @@ int main()
     };
     float planeVertices[] = {
         // positions          // texture Coords 
-         5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-        -5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
-        -5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+         5.0f, -0.51f,  5.0f,  2.0f, 0.0f,
+        -5.0f, -0.51f,  5.0f,  0.0f, 0.0f,
+        -5.0f, -0.51f, -5.0f,  0.0f, 2.0f,
 
-         5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-        -5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
-         5.0f, -0.5f, -5.0f,  2.0f, 2.0f
+         5.0f, -0.51f,  5.0f,  2.0f, 0.0f,
+        -5.0f, -0.51f, -5.0f,  0.0f, 2.0f,
+         5.0f, -0.51f, -5.0f,  2.0f, 2.0f
     };
     float transparentVertices[] = {
         // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
@@ -197,7 +197,7 @@ int main()
     unsigned int floorTexture = loadTexture(FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/textures/floor.jpg").c_str());
     unsigned int transparentTexture = loadTexture(FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/textures/window.png").c_str());
 
-    // grass locations
+    // windows locations
     std::vector<glm::vec3> windows
     {
         glm::vec3(-1.5f, 0.0f, -0.48f),
