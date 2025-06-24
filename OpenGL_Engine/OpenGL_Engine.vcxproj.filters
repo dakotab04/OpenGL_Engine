@@ -26,10 +26,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\framebuffers.fs" />
-    <None Include="src\shaders\framebuffers.vs" />
-    <None Include="src\shaders\framebuffers_screen.fs" />
-    <None Include="src\shaders\framebuffers_screen.vs" />
+    <None Include="src\shaders\cubemaps.fs" />
+    <None Include="src\shaders\cubemaps.vs" />
+    <None Include="src\shaders\skybox.fs" />
+    <None Include="src\shaders\skybox.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\Shader.h">
@@ -61,16 +61,25 @@
     <Image Include="resources\textures\floor.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="resources\textures\grass.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="resources\textures\window.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="resources\textures\cube.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="resources\textures\floor.png">
+    <Image Include="resources\skybox\back.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\bottom.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\front.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\left.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\right.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\top.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
