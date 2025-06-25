@@ -156,6 +156,12 @@
     <Image Include="resources\skybox\default\left.jpg" />
     <Image Include="resources\skybox\default\right.jpg" />
     <Image Include="resources\skybox\default\top.jpg" />
+    <Image Include="resources\skybox\space\back.png" />
+    <Image Include="resources\skybox\space\bottom.png" />
+    <Image Include="resources\skybox\space\front.png" />
+    <Image Include="resources\skybox\space\left.png" />
+    <Image Include="resources\skybox\space\right.png" />
+    <Image Include="resources\skybox\space\top.png" />
     <Image Include="resources\textures\container2.png" />
     <Image Include="resources\textures\container2_specular.png" />
     <Image Include="resources\textures\cube.png" />

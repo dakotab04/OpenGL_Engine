@@ -87,6 +87,24 @@
     <Image Include="resources\objects\planet\mars.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="resources\skybox\space\back.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\space\bottom.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\space\front.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\space\left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\space\right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\skybox\space\top.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="resources\objects\planet\source.txt" />

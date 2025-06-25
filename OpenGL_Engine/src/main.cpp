@@ -110,7 +110,8 @@ int main()
     {
         Entity* lastEntity = &ourEntity;
 
-        for (unsigned int i = 0; i < 10; ++i)
+        // how many planets we want
+        for (unsigned int i = 0; i < 1; ++i)
         {
             lastEntity->addChild(ourModel);
             lastEntity = lastEntity->children.back().get();
@@ -183,12 +184,12 @@ int main()
     // load textures
     std::vector<std::string> faces
     {
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/right.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/left.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/top.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/bottom.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/front.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/back.jpg")
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/space/right.png"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/space/left.png"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/space/top.png"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/space/bottom.png"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/space/front.png"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/space/back.png")
     };
     unsigned int cubeMapTexture = loadCubemap(faces);
 
