@@ -53,6 +53,9 @@ bool firstMouse = true;
 float deltaTime = 0.0f;	// time between current frame and last frame
 float lastFrame = 0.0f;
 
+// lighting
+glm::vec3 lightPos(8.2f, 8.0f, 9.0f);
+
 int main()
 {
     // glfw: initialize and configure
@@ -100,10 +103,11 @@ int main()
 
     // build and compile our shader source code
     // change to your specified directory here:
-    Shader shader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/cubemaps.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/cubemaps.fs");
+    Shader shader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/basic.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/basic.fs");
     Shader skyboxShader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/skybox.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/skybox.fs");
+    Shader lightingCubeShader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/light_cube.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/light_cube.fs");
 
-    Model model(FileSystem::getPath("resources/objects/planet/planet.obj"));
+    Model model(FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/objects/planet/planet.obj"));
     Entity ourEntity(model);
     ourEntity.transform.setLocalPosition({ 0, 0, 0 });
     const float scale = 1.0;
@@ -112,9 +116,9 @@ int main()
     {
         Entity* lastEntity = &ourEntity;
 
-        for (unsigned int x = 0; x < 10; ++x)
+        for (unsigned int x = 0; x < 1; ++x)
         {
-            for (unsigned int z = 0; z < 10; ++z)
+            for (unsigned int z = 0; z < 1; ++z)
             {
                 ourEntity.addChild(model);
                 lastEntity = ourEntity.children.back().get();
@@ -181,6 +185,16 @@ int main()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
+    // lightCube
+    unsigned int lightCubeVAO, lightCubeVBO;
+    glGenVertexArrays(1, &lightCubeVAO);
+    glGenBuffers(1, &lightCubeVBO);
+    glBindVertexArray(lightCubeVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, lightCubeVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
     // orient skybox texture correctly
     stbi_set_flip_vertically_on_load(false);
 
@@ -219,6 +233,11 @@ int main()
 
         shader.use();
 
+        shader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+        shader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
+        shader.setVec3("lightPos", lightPos);
+        shader.setVec3("viewPos", camera.Position);
+
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         const Frustum camFrustum = createFrustumFromCamera(camera, (float)SCR_WIDTH / (float)SCR_HEIGHT, glm::radians(camera.Zoom), 0.1f, 100.0f);
@@ -229,14 +248,33 @@ int main()
         //cameraSpy.Position = { cos(acc) * 10, 0.f, sin(acc) * 10 };
         glm::mat4 view = camera.GetViewMatrix();
 
+        // project + view matrices
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
+
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        shader.setMat4("model", model);
 
         // draw our scene graph
         unsigned int total = 0, display = 0;
         ourEntity.drawSelfAndChild(camFrustum, shader, display, total);
-        std::cout << "Total process in CPU : " << total << " / Total send to GPU : " << display << std::endl;
+        // std::cout << "Total process in CPU : " << total << " / Total send to GPU : " << display << std::endl;
 
+        // also draw the lamp object
+        lightingCubeShader.use();
+        lightingCubeShader.setMat4("projection", projection);
+        lightingCubeShader.setMat4("view", view);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+        lightingCubeShader.setMat4("model", model);
+
+        glBindVertexArray(lightCubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // rotate entity
+        ourEntity.transform.setLocalRotation({ 0.0f, ourEntity.transform.getLocalRotation().y + 20 * deltaTime, 0.0f });
         ourEntity.updateSelfAndChild();
 
         // draw skybox as last
@@ -260,7 +298,10 @@ int main()
 
     // optional: de-allocate all resources once they've outlived their purpose:
     glDeleteVertexArrays(1, &skyboxVAO);
+    glDeleteVertexArrays(1, &lightCubeVAO);
     glDeleteBuffers(1, &skyboxVBO);
+    glDeleteBuffers(1, &lightCubeVBO);
+
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     glfwTerminate();

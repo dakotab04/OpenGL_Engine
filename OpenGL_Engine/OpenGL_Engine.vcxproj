@@ -135,12 +135,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\objects\planet\planet.mtl" />
-    <None Include="src\shaders\cubemaps.fs" />
-    <None Include="src\shaders\cubemaps.vs" />
+    <None Include="src\shaders\basic.fs" />
+    <None Include="src\shaders\basic.vs" />
+    <None Include="src\shaders\light_cube.fs" />
+    <None Include="src\shaders\light_cube.vs" />
     <None Include="src\shaders\skybox.fs" />
     <None Include="src\shaders\skybox.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\includes\Entity.h" />
     <ClInclude Include="src\includes\filesystem.h" />
     <ClInclude Include="src\includes\Camera.h" />
     <ClInclude Include="src\includes\Mesh.h" />

@@ -26,12 +26,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\cubemaps.fs" />
-    <None Include="src\shaders\cubemaps.vs" />
+    <None Include="src\shaders\basic.fs" />
+    <None Include="src\shaders\basic.vs" />
     <None Include="src\shaders\skybox.fs" />
     <None Include="src\shaders\skybox.vs" />
     <None Include="resources\objects\planet\planet.mtl" />
     <None Include="resources\objects\planet\planet.obj" />
+    <None Include="src\shaders\light_cube.fs" />
+    <None Include="src\shaders\light_cube.vs" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\Shader.h">
@@ -50,6 +52,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\includes\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\includes\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
