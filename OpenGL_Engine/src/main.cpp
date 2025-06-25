@@ -43,10 +43,11 @@ const unsigned int SCR_WIDTH = 800; // window width
 const unsigned int SCR_HEIGHT = 600; // window height
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f)); // creates 3d vector representing camera pos
-float lastX = SCR_WIDTH / 2.0f; // store last known mouse position (x, y)
+Camera camera(glm::vec3(0.0f, 10.0f, 0.0f));
+Camera cameraSpy(glm::vec3(0.0f, 10.0f, 0.f));
+float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
-bool firstMouse = true; // ignore first mouse input -> avoid jumpy camera actions
+bool firstMouse = true;
 
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -95,30 +96,32 @@ int main()
     // configure global opengl state
     glEnable(GL_DEPTH_TEST);
 
+    camera.MovementSpeed = 20.f;
+
     // build and compile our shader source code
     // change to your specified directory here:
     Shader shader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/cubemaps.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/cubemaps.fs");
     Shader skyboxShader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/skybox.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/skybox.fs");
 
-    // load model
-    Model ourModel(FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/objects/planet/planet.obj"));
-    Entity ourEntity(ourModel);
-    ourEntity.transform.setLocalPosition({ 10, 0, 0 });
-    const float scale = 0.75;
+    Model model(FileSystem::getPath("resources/objects/planet/planet.obj"));
+    Entity ourEntity(model);
+    ourEntity.transform.setLocalPosition({ 0, 0, 0 });
+    const float scale = 1.0;
     ourEntity.transform.setLocalScale({ scale, scale, scale });
 
     {
         Entity* lastEntity = &ourEntity;
 
-        // how many planets we want
-        for (unsigned int i = 0; i < 1; ++i)
+        for (unsigned int x = 0; x < 10; ++x)
         {
-            lastEntity->addChild(ourModel);
-            lastEntity = lastEntity->children.back().get();
+            for (unsigned int z = 0; z < 10; ++z)
+            {
+                ourEntity.addChild(model);
+                lastEntity = ourEntity.children.back().get();
 
-            //Set transform values
-            lastEntity->transform.setLocalPosition({ 10, 0, 0 });
-            lastEntity->transform.setLocalScale({ scale, scale, scale });
+                //Set transform values
+                lastEntity->transform.setLocalPosition({ x * 10.f - 100.f,  0.f, z * 10.f - 100.f });
+            }
         }
     }
     ourEntity.updateSelfAndChild();
@@ -203,7 +206,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         // per-frame time logic
-        float currentFrame = static_cast<float>(glfwGetTime());
+        float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -218,20 +221,22 @@ int main()
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        const Frustum camFrustum = createFrustumFromCamera(camera, (float)SCR_WIDTH / (float)SCR_HEIGHT, glm::radians(camera.Zoom), 0.1f, 100.0f);
+
+        cameraSpy.ProcessMouseMovement(2, 0);
+        //static float acc = 0;
+        //acc += deltaTime * 0.0001;
+        //cameraSpy.Position = { cos(acc) * 10, 0.f, sin(acc) * 10 };
         glm::mat4 view = camera.GetViewMatrix();
+
         shader.setMat4("projection", projection);
         shader.setMat4("view", view);
 
         // draw our scene graph
-        Entity* lastEntity = &ourEntity;
-        while (lastEntity->children.size())
-        {
-            shader.setMat4("model", lastEntity->transform.getModelMatrix());
-            lastEntity->pModel->Draw(shader);
-            lastEntity = lastEntity->children.back().get();
-        }
+        unsigned int total = 0, display = 0;
+        ourEntity.drawSelfAndChild(camFrustum, shader, display, total);
+        std::cout << "Total process in CPU : " << total << " / Total send to GPU : " << display << std::endl;
 
-        ourEntity.transform.setLocalRotation({ 0.f, ourEntity.transform.getLocalRotation().y + 20 * deltaTime, 0.f });
         ourEntity.updateSelfAndChild();
 
         // draw skybox as last
