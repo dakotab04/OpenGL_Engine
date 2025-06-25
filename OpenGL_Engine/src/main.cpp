@@ -11,6 +11,21 @@
 #include "includes/Shader.h"
 #include "includes/Camera.h"
 #include "includes/Model.h" // for model importing
+#include "includes/Entity.h"
+
+#ifndef ENTITY_H
+#define ENTITY_H
+
+#include <list> //std::list
+#include <memory> //std::unique_ptr
+
+class Entity : public Model
+{
+public:
+    std::list<std::unique_ptr<Entity>> children;
+    Entity* parent;
+};
+#endif
 
 #include <iostream>
 
@@ -74,6 +89,9 @@ int main()
         return -1;
     }
 
+    // for backpack
+    stbi_set_flip_vertically_on_load(true);
+
     // configure global opengl state
     glEnable(GL_DEPTH_TEST);
 
@@ -82,50 +100,28 @@ int main()
     Shader shader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/cubemaps.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/cubemaps.fs");
     Shader skyboxShader("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/skybox.vs", "C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/src/shaders/skybox.fs");
 
-    float cubeVertices[] = {
-        // positions          // texture Coords
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    // load model
+    Model ourModel(FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/objects/planet/planet.obj"));
+    Entity ourEntity(ourModel);
+    ourEntity.transform.setLocalPosition({ 10, 0, 0 });
+    const float scale = 0.75;
+    ourEntity.transform.setLocalScale({ scale, scale, scale });
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    {
+        Entity* lastEntity = &ourEntity;
 
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        for (unsigned int i = 0; i < 10; ++i)
+        {
+            lastEntity->addChild(ourModel);
+            lastEntity = lastEntity->children.back().get();
 
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            //Set transform values
+            lastEntity->transform.setLocalPosition({ 10, 0, 0 });
+            lastEntity->transform.setLocalScale({ scale, scale, scale });
+        }
+    }
+    ourEntity.updateSelfAndChild();
 
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
     float skyboxVertices[] = {
         // positions          
         -1.0f,  1.0f, -1.0f,
@@ -171,17 +167,6 @@ int main()
          1.0f, -1.0f,  1.0f
     };
 
-    // cube VAO
-    unsigned int cubeVAO, cubeVBO;
-    glGenVertexArrays(1, &cubeVAO);
-    glGenBuffers(1, &cubeVBO);
-    glBindVertexArray(cubeVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     // skybox VAO
     unsigned int skyboxVAO, skyboxVBO;
     glGenVertexArrays(1, &skyboxVAO);
@@ -192,23 +177,20 @@ int main()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-    // load textures
-    // change to your specified directory:
-    unsigned int cubeTexture = loadTexture(FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/textures/container2.png").c_str());
+    // orient skybox texture correctly
+    stbi_set_flip_vertically_on_load(false);
 
+    // load textures
     std::vector<std::string> faces
     {
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/right.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/left.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/top.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/bottom.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/front.jpg"),
-        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/back.jpg")
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/right.jpg"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/left.jpg"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/top.jpg"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/bottom.jpg"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/front.jpg"),
+        FileSystem::getPath("C:/Users/dakot/OneDrive/Desktop/OpenGL Projects/OpenGL_Engine/OpenGL_Engine/resources/skybox/default/back.jpg")
     };
     unsigned int cubeMapTexture = loadCubemap(faces);
-
-    shader.use();
-    shader.setInt("texture1", 0);
 
     skyboxShader.use();
     skyboxShader.setInt("skybox", 0);
@@ -231,24 +213,25 @@ int main()
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f); // Background color
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color + depth buffer every frame
 
-        // make sure we clear the framebuffer's content
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         shader.use();
-        glm::mat4 model = glm::mat4(1.0f);
+
+        // view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
-            (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        shader.setMat4("model", model);
-        shader.setMat4("view", view);
         shader.setMat4("projection", projection);
-        // cubes
-        glBindVertexArray(cubeVAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, cubeTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        glBindVertexArray(0);
+        shader.setMat4("view", view);
+
+        // draw our scene graph
+        Entity* lastEntity = &ourEntity;
+        while (lastEntity->children.size())
+        {
+            shader.setMat4("model", lastEntity->transform.getModelMatrix());
+            lastEntity->pModel->Draw(shader);
+            lastEntity = lastEntity->children.back().get();
+        }
+
+        ourEntity.transform.setLocalRotation({ 0.f, ourEntity.transform.getLocalRotation().y + 20 * deltaTime, 0.f });
+        ourEntity.updateSelfAndChild();
 
         // draw skybox as last
         glDepthFunc(GL_LEQUAL);
@@ -270,8 +253,6 @@ int main()
     }
 
     // optional: de-allocate all resources once they've outlived their purpose:
-    glDeleteVertexArrays(1, &cubeVAO);
-    glDeleteBuffers(1, &cubeVBO);
     glDeleteVertexArrays(1, &skyboxVAO);
     glDeleteBuffers(1, &skyboxVBO);
 
