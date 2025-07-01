@@ -230,7 +230,12 @@ int main()
     ImGui_ImplOpenGL3_Init("#version 330");
 
     // imgui settings
-    bool drawLamp = true;
+    bool drawPlanet = true;
+    bool drawLight = true;
+    bool drawSkyBox = true;
+    float planetSize = 1.0f;
+    glUseProgram(lightCubeVAO);
+    glUniform1f(glGetUniformLocation(lightCubeVAO, "planetSize"), planetSize);
 
     // draw in wireframe
     // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -282,7 +287,8 @@ int main()
 
         // draw our scene graph
         unsigned int total = 0, display = 0;
-        ourEntity.drawSelfAndChild(camFrustum, shader, display, total);
+        if (drawPlanet)
+            ourEntity.drawSelfAndChild(camFrustum, shader, display, total);
         // std::cout << "Total process in CPU : " << total << " / Total send to GPU : " << display << std::endl;
 
         // also draw the lamp object
@@ -295,7 +301,7 @@ int main()
         lightingCubeShader.setMat4("model", model);
 
         glBindVertexArray(lightCubeVAO);
-        if (drawLamp)
+        if (drawLight)
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // rotate entity
@@ -312,13 +318,20 @@ int main()
         glBindVertexArray(skyboxVAO);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMapTexture);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        if (drawSkyBox)
+            glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
         glDepthFunc(GL_LESS); // set depth function back to default
 
         ImGui::Begin("ImGUI window");
-        ImGui::Checkbox("Light", &drawLamp);
+        ImGui::Checkbox("Light", &drawLight);
+        ImGui::Checkbox("Planet", &drawPlanet);
+        ImGui::Checkbox("Skybox", &drawSkyBox);
+        ImGui::SliderFloat("Scale Planet", &planetSize, 0.5f, 2.0f);
         ImGui::End();
+
+        glUseProgram(lightCubeVAO);
+        glUniform1f(glGetUniformLocation(lightCubeVAO, "planetSize"), planetSize);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

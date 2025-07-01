@@ -10,6 +10,7 @@ out vec2 TexCoords;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform float planetSize;
 
 void main()
 {
@@ -22,5 +23,5 @@ void main()
     TexCoords = aTexCoords;
 
     // Transform vertex position to clip space
-    gl_Position = projection * view * vec4(FragPos, 1.0);
+    gl_Position = projection * view * vec4(planetSize * FragPos, 1.0);
 }
